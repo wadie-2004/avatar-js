@@ -1,0 +1,17 @@
+{
+  "name": "Avatar-js",
+  "version": "1.0.0",
+  "description": "Convert colored images to greystyle (non-gif)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "express": "^4.17.1",
+    "jimp": "^0.16.1"
+  },
+  "author": "Scorpion ( Omar )",
+  "license": "ISC"
+}
