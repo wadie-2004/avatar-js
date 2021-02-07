@@ -1,12 +1,11 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const prefix = "."
-var Jimp = require('jimp');
-var client = new Discord.Client();
+const Jimp = require('jimp');
+const client = new Discord.Client();
 const DIG = require("discord-image-generation");
 const express = require("express");
-const app = express();
-
+const app = express()
 app.listen(() => console.log("Server started"));
 
 app.use('/', (req, res) => {
@@ -33,10 +32,9 @@ client.on("message",async msg => {
   if (msg.content.toLowerCase().startsWith(prefix + 'edit')) {
     msg.delete({timeout: 300000})
     const imgURL = (msg.attachments.first() && msg.attachments.first().proxyURL) || (msg.mentions.users.first() && msg.mentions.users.first().displayAvatarURL({ dynamic: true, format: "png", size: 2048 })) || msg.content.split(" ")[1] || msg.author.displayAvatarURL({ dynamic: true, format: 'png' , size: 2048 });
-    let img = await new DIG.Blur().getImage(imgURL);
+    let img = await new DIG.Blur().getImage(imgURL,2);
     let attach = new Discord.MessageAttachment(img, "edit.png");
     msg.channel.send("***edit***",attach).then(msg => msg.delete({ timeout: 300000}))
 }
-
 });
 client.login("")
