@@ -35,6 +35,43 @@ client.on("message",async msg => {
     let img = await new DIG.Blur().getImage(imgURL,2);
     let attach = new Discord.MessageAttachment(img, "edit.png");
     msg.channel.send("***edit***",attach).then(msg => msg.delete({ timeout: 300000}))
+ }
+    if(msg.content.toLowerCase().startsWith(prefix+"setname")||msg.content === prefix+"name"){
+     if(!msg.guild.member(msg.author).hasPermission("ADMINISTRATOR"))
+return msg.channel.send("**Your Must Have ADMINISTRATOR Permission**")
+if(!msg.guild.member(client.user).hasPermission("ADMINISTRATOR"))
+return msg.channel.send("**I Must Have a ADMINISTRATOR Permission**")
+    let args = msg.content.split(" ").slice(1).join(" ")
+    if (!args) return
+    client.user.setUsername(args)
+    msg.channel.send(`${client.user.username} name has been channged to **${args}**`)
 }
+ if(msg.content.toLowerCase().startsWith(prefix+"setavatar")){
+     if(!msg.guild.member(msg.author).hasPermission("ADMINISTRATOR"))
+return msg.channel.send("**Your Must Have ADMINISTRATOR Permission**")
+if(!msg.guild.member(client.user).hasPermission("ADMINISTRATOR"))
+return msg.channel.send("**I Must Have a ADMINISTRATOR Permission**")
+
+    let args = msg.content.split(" ").slice(1).join(" ")
+client.user.setAvatar(args)
+msg.channel.send(new Discord.MessageEmbed().setColor(msg.guild.member(client.user).roles.highest.hexColor)
+.setDescription("Done | This is New Avatar bot"))
+  .setImage(args)
+  msg.channel.send(embed)
+}
+
+if (msg.content.toLowerCase().startsWith(prefix + 'help')) {
+msg.delete({timeout: 300000})
+      if (msg.author.bot) return;
+      let help = new Discord.MessageEmbed()
+      .setColor(msg.guild.member(client.user).roles.highest.hexColor)
+      .setAuthor(`${msg.guild.me.displayName}`, msg.guild.iconURL())
+            .setThumbnail(client.user.displayAvatarURL())
+   .addField("everyone" , '`change : Changes to black and white.` \n `edit : Works on blur for pictures.` ')
+   .addField("owner" , '`setavatar` , `setname`')
+      .setTimestamp()
+      .setFooter(`Command Requested By ${msg.author.tag}`, client.user.displayAvatarURL());
+    return msg.channel.send(help).then(msg => msg.delete({ timeout: 300000}))
+  }
 });
 client.login("")
