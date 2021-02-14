@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const prefix = "."
+const prefix = (".")
 const Jimp = require('jimp');
 const client = new Discord.Client();
 const DIG = require("discord-image-generation");
@@ -11,12 +11,12 @@ app.listen(() => console.log("Server started"));
 app.use('/', (req, res) => {
   res.send(new Date());
 });
-
+ 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag} `);
 	var ms = 10000;
 	client.user.setPresence({
-		activity: { name: 'ohh, Now you are in Çukur....', type: 'WATCHING' },
+		activity: { name: 'Now you are in Çukur....', type: 'WATCHING' },
 		status: 'idle'
 	});
 });
@@ -36,7 +36,16 @@ client.on("message",async msg => {
     let attach = new Discord.MessageAttachment(img, "edit.png");
     msg.channel.send("***edit***",attach).then(msg => msg.delete({ timeout: 300000}))
  }
-    if(msg.content.toLowerCase().startsWith(prefix+"setname")||msg.content === prefix+"name"){
+ 
+  if (msg.content.toLowerCase().startsWith(prefix + 'say')) {
+      if(!msg.guild.member(msg.author).hasPermission("MANAGE_GUILD"))
+return msg.channel.send("**Your Must Have Manage gulid Permission**")
+if(!msg.guild.member(client.user).hasPermission("MANAGE_GUILD"))
+return msg.channel.send("**I Must Have a Manage gulid Permission**")
+  let arg = msg.content.split(" ").slice(1).join(" ")
+msg.channel.send(arg)
+    msg.delete();
+}   if(msg.content.toLowerCase().startsWith(prefix+"setname")||msg.content === prefix+"name"){
      if(!msg.guild.member(msg.author).hasPermission("ADMINISTRATOR"))
 return msg.channel.send("**Your Must Have ADMINISTRATOR Permission**")
 if(!msg.guild.member(client.user).hasPermission("ADMINISTRATOR"))
@@ -73,5 +82,13 @@ msg.delete({timeout: 300000})
       .setFooter(`Command Requested By ${msg.author.tag}`, client.user.displayAvatarURL());
     return msg.channel.send(help).then(msg => msg.delete({ timeout: 300000}))
   }
+  
+if (msg.content.toLowerCase().startsWith(prefix + 'setgame')){
+msg.delete({timeout: 300000})
+msg.channel.send(new Discord.MessageEmbed().setColor(msg.guild.member(client.user).roles.highest.hexColor)
+.setFooter(`Requested By: ${msg.author.tag}`,msg.author.avatarURL({ dynamic: true }))
+    .setTitle("Type the status you want")
+.setDescription(`${prefix}playing , ${prefix}Listening , ${prefix}stream , ${prefix}Watching , Then the case you wan`)).then(msg => msg.delete({ timeout: 300000}))
+}
 });
 client.login("")
