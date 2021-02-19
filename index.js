@@ -96,4 +96,4 @@ max: 5
     message.author.send(`>>> **User** : 5\n**Time** : 12h \n **Link** : ${invite.url} `);
   }
 });
-client.login("ODAzNzM2ODI0MjQ0ODYyOTc2.YBCIPw.L6vnIxrkR6uCVs__mMQIsT1vM-w")
+client.login("")
