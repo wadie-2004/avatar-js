@@ -79,16 +79,21 @@ msg.delete({timeout: 300000})
    .addField("everyone" , '`change : Changes to black and white.` \n `edit : Works on blur for pictures.` ')
    .addField("owner" , '`setavatar` , `setname`')
       .setTimestamp()
-      .setFooter(`Command Requested By ${msg.author.tag}`, client.user.displayAvatarURL());
-    return msg.channel.send(help).then(msg => msg.delete({ timeout: 300000}))
+      .setFooter(`Requested By: ${msg.author.tag}`,msg.author.avatarURL({ dynamic: true }))
+      return msg.channel.send(help).then(msg => msg.delete({ timeout: 300000}))
   }
-  
-if (msg.content.toLowerCase().startsWith(prefix + 'setgame')){
-msg.delete({timeout: 300000})
-msg.channel.send(new Discord.MessageEmbed().setColor(msg.guild.member(client.user).roles.highest.hexColor)
-.setFooter(`Requested By: ${msg.author.tag}`,msg.author.avatarURL({ dynamic: true }))
-    .setTitle("Type the status you want")
-.setDescription(`${prefix}playing , ${prefix}Listening , ${prefix}stream , ${prefix}Watching , Then the case you wan`)).then(msg => msg.delete({ timeout: 300000}))
-}
 });
-client.login("")
+client.on("message", async (message) => {
+  if (!message.guild || message.author.bot) return;
+    if (message.content.toLowerCase() === prefix + "link" ||
+message.content  === "رابط") {
+message.delete({timeout: 300000})
+   var invite= await message.channel.createInvite({
+age: 1000*60*60*60*12,
+max: 5
+});
+    message.channel.send("*check your dm ..*").then(msg => msg.delete({ timeout: 300000}))
+    message.author.send(`>>> **User** : 5\n**Time** : 12h \n **Link** : ${invite.url} `);
+  }
+});
+client.login("ODAzNzM2ODI0MjQ0ODYyOTc2.YBCIPw.L6vnIxrkR6uCVs__mMQIsT1vM-w")
