@@ -96,4 +96,46 @@ max: 5
     message.author.send(`>>> **User** : 5\n**Time** : 12h \n **Link** : ${invite.url} `);
   }
 });
+
+client.on("message",message=>{
+  if(message.content.toLowerCase().startsWith("role")){
+      message.delete({timeout: 300000})
+ let errorRole = new Discord.MessageEmbed()
+ .setColor(message.guild.member(client.user).roles.highest.hexColor)
+      .setDescription('Type Role name.')
+    let errorUser = new Discord.MessageEmbed()
+     .setColor(message.guild.member(client.user).roles.highest.hexColor)
+      .setDescription('mention user')
+    var args_s = message.content.split(" ").slice(1);
+    var msg = message.content.toLowerCase();
+    var args1 = message.content.split(" ");
+
+    if (!message.guild) return;
+
+    if (!args_s[0])
+      return message.channel
+        .send(errorUser)
+    if (!args_s[1])
+      return message.channel
+        .send(errorRole)
+    let role = msg
+      .split(" ")
+      .slice(2)
+      .join(" ")
+      .toLowerCase();
+    let role1 = message.guild.roles.cache
+      .filter(r => r.name.toLowerCase().indexOf(role) > -1)
+      .first();
+    if (!role1) return 
+       message.react("❌")
+var user = message.guild.member(
+message.mentions.users.first()||message.guild.members.cache.get(args_s[0])
+)
+
+    if (user) {
+user.roles.add(role1);
+       message.react("✅")
+    }
+    }
+});
 client.login("")
