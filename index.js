@@ -16,7 +16,7 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag} `);
 	var ms = 10000;
 	client.user.setPresence({
-		activity: { name: 'Now you are in Çukur....', type: 'WATCHING' },
+		activity: { name: 'You now Puury....', type: 'WATCHING' },
 		status: 'idle'
 	});
 });
@@ -35,8 +35,15 @@ client.on("message",async msg => {
     let img = await new DIG.Blur().getImage(imgURL,2);
     let attach = new Discord.MessageAttachment(img, "edit.png");
     msg.channel.send("***edit***",attach).then(msg => msg.delete({ timeout: 300000}))
+}
+  if (msg.content.toLowerCase().startsWith(prefix + 'sepia')) {
+    msg.delete({timeout: 300000})
+    const imgURL = (msg.attachments.first() && msg.attachments.first().proxyURL) || (msg.mentions.users.first() && msg.mentions.users.first().displayAvatarURL({ dynamic: true, format: "png", size: 2048 })) || msg.content.split(" ")[1] || msg.author.displayAvatarURL({ dynamic: true, format: 'png' , size: 2048 });
+    let img = await new DIG.Sepia().getImage(imgURL);
+    let attach = new Discord.MessageAttachment(img, "Sepia.png");
+    msg.channel.send("***Sepia***",attach).then(msg => msg.delete({ timeout: 300000}))
  }
- 
+
   if (msg.content.toLowerCase().startsWith(prefix + 'say')) {
       if(!msg.guild.member(msg.author).hasPermission("MANAGE_GUILD"))
 return msg.channel.send("**Your Must Have Manage gulid Permission**")
@@ -45,6 +52,7 @@ return msg.channel.send("**I Must Have a Manage gulid Permission**")
   let arg = msg.content.split(" ").slice(1).join(" ")
 msg.channel.send(arg)
     msg.delete();
+    
 }   if(msg.content.toLowerCase().startsWith(prefix+"setname")||msg.content === prefix+"name"){
      if(!msg.guild.member(msg.author).hasPermission("ADMINISTRATOR"))
 return msg.channel.send("**Your Must Have ADMINISTRATOR Permission**")
@@ -53,7 +61,9 @@ return msg.channel.send("**I Must Have a ADMINISTRATOR Permission**")
     let args = msg.content.split(" ").slice(1).join(" ")
     if (!args) return
     client.user.setUsername(args)
-    msg.channel.send(`${client.user.username} name has been channged to **${args}**`)
+    
+msg.channel.send(new Discord.MessageEmbed().setColor(msg.guild.member(client.user).roles.highest.hexColor)
+.setDescription(`${client.user.username} name has been channged to **${args}**`))
 }
  if(msg.content.toLowerCase().startsWith(prefix+"setavatar")){
      if(!msg.guild.member(msg.author).hasPermission("ADMINISTRATOR"))
@@ -66,7 +76,6 @@ client.user.setAvatar(args)
 msg.channel.send(new Discord.MessageEmbed().setColor(msg.guild.member(client.user).roles.highest.hexColor)
 .setDescription("Done | This is New Avatar bot"))
   .setImage(args)
-  msg.channel.send(embed)
 }
 
 if (msg.content.toLowerCase().startsWith(prefix + 'help')) {
@@ -76,66 +85,11 @@ msg.delete({timeout: 300000})
       .setColor(msg.guild.member(client.user).roles.highest.hexColor)
       .setAuthor(`${msg.guild.me.displayName}`, msg.guild.iconURL())
             .setThumbnail(client.user.displayAvatarURL())
-   .addField("everyone" , '`change : Changes to black and white.` \n `edit : Works on blur for pictures.` ')
-   .addField("owner" , '`setavatar` , `setname`')
+   .addField("everyone" ,'`change` , `edit` , `sepia`')
+     .addField("owner" , '`setavatar` , `setname`')
       .setTimestamp()
       .setFooter(`Requested By: ${msg.author.tag}`,msg.author.avatarURL({ dynamic: true }))
       return msg.channel.send(help).then(msg => msg.delete({ timeout: 300000}))
   }
-});
-client.on("message", async (message) => {
-  if (!message.guild || message.author.bot) return;
-    if (message.content.toLowerCase() === prefix + "link" ||
-message.content  === "رابط") {
-message.delete({timeout: 300000})
-   var invite= await message.channel.createInvite({
-age: 1000*60*60*60*12,
-max: 5
-});
-    message.channel.send("*check your dm ..*").then(msg => msg.delete({ timeout: 300000}))
-    message.author.send(`>>> **User** : 5\n**Time** : 12h \n **Link** : ${invite.url} `);
-  }
-});
-
-client.on("message",message=>{
-  if(message.content.toLowerCase().startsWith("role")){
-      message.delete({timeout: 300000})
- let errorRole = new Discord.MessageEmbed()
- .setColor(message.guild.member(client.user).roles.highest.hexColor)
-      .setDescription('Type Role name.')
-    let errorUser = new Discord.MessageEmbed()
-     .setColor(message.guild.member(client.user).roles.highest.hexColor)
-      .setDescription('mention user')
-    var args_s = message.content.split(" ").slice(1);
-    var msg = message.content.toLowerCase();
-    var args1 = message.content.split(" ");
-
-    if (!message.guild) return;
-
-    if (!args_s[0])
-      return message.channel
-        .send(errorUser)
-    if (!args_s[1])
-      return message.channel
-        .send(errorRole)
-    let role = msg
-      .split(" ")
-      .slice(2)
-      .join(" ")
-      .toLowerCase();
-    let role1 = message.guild.roles.cache
-      .filter(r => r.name.toLowerCase().indexOf(role) > -1)
-      .first();
-    if (!role1) return 
-       message.react("❌")
-var user = message.guild.member(
-message.mentions.users.first()||message.guild.members.cache.get(args_s[0])
-)
-
-    if (user) {
-user.roles.add(role1);
-       message.react("✅")
-    }
-    }
 });
 client.login("")
